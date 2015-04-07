@@ -127,7 +127,7 @@
     var url='frequent_sequence.php?';
     var ragne=$F('range').split(",");
     var size=$F('size');
-	clearArray(rectList); rectBounds = [];
+	  clearArray(rectList); rectBounds = [];
     if (size >0 && range!="") {
       var qstr = "range="+$F('range')+"&support_1="+$F('support_1')+"&speed_l="+$F('speed_l')+"&speed_h="+$F('speed_h')+"&time_l="+$F('time_l')+"&time_h="+$F('time_h')+"&size="+size;
       Element.update('content2',"Running...");
@@ -179,7 +179,17 @@
       Arr=[];
     }
   }
-
+  function drawGrid(){  // experiment, given pattern and draw on map 
+    var url='drawGrids.php?'; 
+    var qstr = "range="+$F('range')+"&grid_size="+$F('size_test')+"&pattern="+$F('pattern');
+    Element.update('content1',"Running...");
+    var ajax=new Ajax.Request(url,{
+      method: 'post', parameters: qstr,
+      onSuccess: function(reqObj){
+        Element.update('content1',reqObj.responseText);
+      }
+    });
+  }
   function testing(){  // Find out frequent grids 
     var url='anomalyDet.php?';
     var ragne=$F('range').split(",");
@@ -236,6 +246,12 @@
 
   <div id="query2" style="margin-top: 30px; margin-left: 10px; overflow:auto; ">
   <h4>RouteMiner</h4>
+  <div>
+  grid size: <input class="input-mini" type="text" id="size_test" value=5> km <br>
+  pattern: <input class="input" type="text" id="pattern" placeholder="grid1,grid2,..."> <br>
+  <button class="btn btn-primary dropdown-toggle" data-toggle="dropdown" onclick="drawGrid();"> Draw Grid </button>
+  </div>
+  <br>
   <strong>Step I</strong> <br>
   grid size: <input class="input-mini" type="text" id="size" value=5> km <br>
   minimum support threshold: <input class="input-mini" type="text" id="support_1" value=10> <br>
